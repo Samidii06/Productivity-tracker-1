@@ -5,13 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalTasksSpan = document.getElementById('total-tasks');
     const completedTasksSpan = document.getElementById('completed-tasks');
 
-    // LocalStorage එකෙන් කලින් save කරපු ඒවා ගන්නවා
+    
     let tasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
 
-    // මුලින්ම තියෙන ඒවා පෙන්වීම
+    
     renderTasks();
 
-    // Add Task බටන් එක ක්ලික් කරද්දී
+  
     addTaskBtn.addEventListener('click', () => {
         const taskText = taskInput.value.trim();
         
