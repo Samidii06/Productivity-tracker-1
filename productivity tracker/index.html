@@ -21,92 +21,10 @@
             <p>Completed Tasks: <span id="completed-tasks">0</span></p>
         </div>
 
-        <ul id="task-list" style="list-style: none; padding: 0;"></ul>
+        <ul id="task-list"></ul>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const taskInput = document.getElementById('task-input');
-            const addTaskBtn = document.getElementById('add-task-btn');
-            const taskList = document.getElementById('task-list');
-            const totalTasksSpan = document.getElementById('total-tasks');
-            const completedTasksSpan = document.getElementById('completed-tasks');
-
-            let tasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
-
-            renderTasks();
-
-            addTaskBtn.addEventListener('click', () => {
-                const taskText = taskInput.value.trim();
-                
-                if (taskText === "") {
-                    alert("Please enter a task first!");
-                    return;
-                }
-
-                const newTask = {
-                    id: Date.now(),
-                    text: taskText,
-                    completed: false
-                };
-
-                tasks.push(newTask);
-                saveAndRefresh();
-                taskInput.value = ""; 
-            });
-
-            function renderTasks() {
-                taskList.innerHTML = ""; 
-                let total = tasks.length;
-                let completed = 0;
-
-                tasks.forEach(task => {
-                    const li = document.createElement('li');
-                    li.style.margin = "12px 0";
-                    li.style.padding = "10px";
-                    li.style.background = "#f9f9f9";
-                    li.style.border = "1px solid #ddd";
-                    li.style.borderRadius = "4px";
-                    li.style.display = "flex";
-                    li.style.justifyContent = "space-between";
-                    li.style.alignItems = "center";
-
-                    if (task.completed) {
-                        completed++;
-                    }
-
-                    li.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} style="transform: scale(1.2); cursor: pointer;">
-                            <span style="${task.completed ? 'text-decoration: line-through; color: gray;' : 'color: #333; font-weight: 500;'}">${task.text}</span>
-                        </div>
-                        <button class="delete-task" style="color: #e74c3c; background: none; border: none; cursor: pointer; font-weight: bold; font-size: 16px;">X</button>
-                    `;
-
-                    const checkbox = li.querySelector('.task-checkbox');
-                    checkbox.addEventListener('change', () => {
-                        task.completed = checkbox.checked;
-                        saveAndRefresh();
-                    });
-
-                    li.querySelector('.delete-task').addEventListener('click', () => {
-                        tasks = tasks.filter(t => t.id !== task.id);
-                        saveAndRefresh();
-                    });
-
-                    taskList.appendChild(li);
-                });
-
-                if (totalTasksSpan) totalTasksSpan.textContent = total;
-                if (completedTasksSpan) completedTasksSpan.textContent = completed;
-            }
-
-            function saveAndRefresh() {
-                localStorage.setItem('savedTasks', JSON.stringify(tasks));
-                renderTasks();
-            }
-        });
-    </script>
+    <script src="script.js"></script>
     
 </body>
 </html>
