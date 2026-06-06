@@ -1,24 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productivity Tracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>Productivity Tracker</h1>
+    <div class="container">
+        <!-- Title -->
+        <h1>Productivity Tracker</h1>
 
-    <input type="text" id="taskInput" placeholder="Enter a task">
-    <button onclick="addTask()">Add Task</button>
+        <!-- Input and Button (IDs must match JavaScript) -->
+        <div class="input-container">
+            <input type="text" id="task-input" placeholder="Enter a task">
+            <button id="add-task-btn">Add Task</button>
+        </div>
 
-    <ul id="taskList"></ul>
+        <!-- Counters (IDs must match JavaScript) -->
+        <div class="counters">
+            <p>Total Tasks: <span id="total-tasks">0</span></p>
+            <p>Completed Tasks: <span id="completed-tasks">0</span></p>
+        </div>
 
-    <p>Total Tasks: <span id="total">0</span></p>
-    <p>Completed Tasks: <span id="completed">0</span></p>
-</div>
+        <!-- Task List Container -->
+        <ul id="task-list"></ul>
+    </div>
 
-<script src="script.js"></script>
-
+    <!-- JavaScript Link -->
+    <script src="script.js"></script>
+    
 </body>
 </html>
