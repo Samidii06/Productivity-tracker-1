@@ -1,55 +1,84 @@
-// Load tasks from localStorage on page load
-let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const taskInput = document.getElementById('task-input');
+const addTaskBtn = document.getElementById('add-task-btn');
+const taskList = document.getElementById('task-list');
+const totalTasksSpan = document.getElementById('total-tasks');
+const completedTasksSpan = document.getElementById('completed-tasks');
 
-function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
+
+let tasks = JSON.parse(localStorage.getItem('savedTasks')) || [];
+
+
+renderTasks();
+
+addTaskBtn.addEventListener('click', () => {
+    const taskText = taskInput.value.trim();
+    
+    if (taskText === "") {
+        alert("Please enter a task first!");
+        return;
+    }
+
+   
+    const newTask = {
+        id: Date.now(),
+        text: taskText,
+        completed: false
+    };
+
+    
+    tasks.push(newTask);
+    saveAndRefresh();
+    
+    taskInput.value = ""; 
+});
+
 
 function renderTasks() {
-  const list = document.getElementById('task-list');
-  const totalEl = document.getElementById('total');
-  const completedEl = document.getElementById('completed');
-  
-  list.innerHTML = '';
-  let completedCount = 0;
+    taskList.innerHTML = ""; 
+    let total = tasks.length;
+    let completed = 0;
 
-  tasks.forEach((task, index) => {
-    if (task.done) completedCount++;
+    tasks.forEach(task => {
+        const li = document.createElement('li');
+        li.style.margin = "10px 0";
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
 
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <span style="${task.done ? 'text-decoration:line-through' : ''}">${task.text}</span>
-      <button onclick="markDone(${index})">Done</button>
-      <button onclick="deleteTask(${index})">Delete</button>
-    `;
-    list.appendChild(li);
-  });
+        if (task.completed) {
+            completed++;
+        }
 
-  if (totalEl) totalEl.textContent = 'Total Tasks: ' + tasks.length;
-  if (completedEl) completedEl.textContent = 'Completed Tasks: ' + completedCount;
+        li.innerHTML = `
+            <div>
+                <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''}>
+                <span style="${task.completed ? 'text-decoration: line-through; color: gray;' : ''}">${task.text}</span>
+            </div>
+            <button class="delete-task" style="color: red; background: none; border: none; cursor: pointer; font-weight: bold;">X</button>
+        `;
+
+       
+        const checkbox = li.querySelector('.task-checkbox');
+        checkbox.addEventListener('change', () => {
+            task.completed = checkbox.checked;
+            saveAndRefresh();
+        });
+
+        
+        li.querySelector('.delete-task').addEventListener('click', () => {
+            tasks = tasks.filter(t => t.id !== task.id);
+            saveAndRefresh();
+        });
+
+        taskList.appendChild(li);
+    });
+
+    if (totalTasksSpan) totalTasksSpan.textContent = total;
+    if (completedTasksSpan) completedTasksSpan.textContent = completed;
 }
 
-function addTask() {
-  const input = document.getElementById('task-input');
-  const text = input.value.trim();
-  if (!text) return;
-  tasks.push({ text: text, done: false });
-  saveTasks();
-  renderTasks();
-  input.value = '';
+// 6. Data ටික බ්‍රවුසර් එකේ Save කරලා screen එක refresh කරන function එක
+function saveAndRefresh() {
+    localStorage.setItem('savedTasks', JSON.stringify(tasks));
+    renderTasks();
 }
-
-function markDone(index) {
-  tasks[index].done = !tasks[index].done;
-  saveTasks();
-  renderTasks();
-}
-
-function deleteTask(index) {
-  tasks.splice(index, 1);
-  saveTasks();
-  renderTasks();
-}
-
-// Run on page load
-renderTasks();
